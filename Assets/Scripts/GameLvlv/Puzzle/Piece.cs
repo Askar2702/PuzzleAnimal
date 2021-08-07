@@ -29,10 +29,10 @@ public class Piece : MonoBehaviour
         _startPos = transform.position;
         transform.DOMove(targetPos, 1f).SetEase(_ease, 0.005f);
         _targetPos = targetPos;
+        transform.DOScale(0.5f, 0.3f);
     }
 
    
-    
 
     private void OnMouseDown()
     {
@@ -40,6 +40,7 @@ public class Piece : MonoBehaviour
         _touchPos = _camera.ScreenToWorldPoint(Input.mousePosition);
         _deltaX = _touchPos.x - transform.position.x;
         _deltaY = _touchPos.y - transform.position.y;
+        transform.DOScale(1f, 0.3f);
     }
 
     private void OnMouseDrag()
@@ -63,6 +64,7 @@ public class Piece : MonoBehaviour
             transform.DOMove(_targetPos, 1f).SetEase(_ease, 0.005f);
             _deltaX = 0;
             _deltaY = 0;
+            transform.DOScale(0.5f, 0.3f);
         }
     }
 }

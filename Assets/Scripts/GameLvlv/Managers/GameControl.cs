@@ -13,7 +13,7 @@ public class GameControl : MonoBehaviour
     
     #region Puzzle
     [SerializeField] private float _delayFinish;
-    [SerializeField] private Transform[] _points;
+    [SerializeField] private RectTransform[] _points;
     [Space(10)]
     [SerializeField] private ParticleSystem _finishPart;
     [Space(10)]
@@ -42,6 +42,7 @@ public class GameControl : MonoBehaviour
     
     public Vector2[] GetPoints()
     {
+        SetEnablePoint(true);
         var points = new Vector2[_points.Length];
         for(int i = 0; i < points.Length; i++)
         {
@@ -50,11 +51,20 @@ public class GameControl : MonoBehaviour
         return points;
     }
 
+    private void SetEnablePoint(bool activ)
+    {
+        for (int i = 0; i < _puzzle.childCount; i++)
+        {
+            _points[i].gameObject.SetActive(activ);
+        }
+    }
+
     public void Finish()
     {
         _finishPart.Play();
         _effectFinish.ShowEffect();
         StartCoroutine(ShowEffect());
+        SetEnablePoint(false);
     }
     IEnumerator ShowEffect()
     {
@@ -70,16 +80,16 @@ public class GameControl : MonoBehaviour
     {
         _nextGame.gameObject.SetActive(false);
         ChangePuzzle?.Invoke();
-        _background.position = _pointStart.position;
+      //  _background.position = _pointStart.position;
         _puzzleParent.position = _pointStart.position;
         _puzzleParent.DOMove(Vector2.zero, 2f).SetEase(Ease.InOutElastic, 0.0001f);
-        _background.DOMove(Vector2.zero, 2f).SetEase(Ease.InOutElastic, 0.0001f);
+      //  _background.DOMove(Vector2.zero, 2f).SetEase(Ease.InOutElastic, 0.0001f);
     }
     private void NextLvl()
     {
         var seq = DOTween.Sequence();
         _puzzleParent.DOMove(_pointEnd.position, 1f).SetEase(Ease.InOutElastic, 0.0001f);
-        seq.Append(_background.DOMove(_pointEnd.position, 1f).SetEase(Ease.InOutElastic, 0.0001f));
+       // seq.Append(_background.DOMove(_pointEnd.position, 1f).SetEase(Ease.InOutElastic, 0.0001f));
         StartCoroutine(SetSignal());
         seq.OnComplete(StartLvl);
     }
